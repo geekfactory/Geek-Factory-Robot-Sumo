@@ -21,22 +21,24 @@
 #include <GFMotor.h>
 #include <GFButton.h>
 #include <GFLed.h>
-#include "gsumo.h"
+
+// incluir configuración del robot (ver otras pestañas)
 #include "pines.h"
 #include "conf.h"
 
 /**
-   LED indicador de estado
+   LED indicador de estado, pasamos como parámetro el pin del LED.
 */
 GFLed ledEstado(PIN_LED_ESTATUS);
 
 /**
-    Boton de inicio del robot
+    Boton de inicio del robot, pasamos como parámetro el pin del botón.
 */
 GFButton botonInicio(PIN_BOTON_INICIO);
 
 /**
-    Objeto que permite el control del sensor ultrasónico
+    Objeto que permite el control del sensor ultrasónico, se pasa como
+    parámetro el pin donde está conectado el boton.
 */
 Ultrasonic ultrasonico(PIN_SENSOR_ULTRASONICO);
 
@@ -78,6 +80,61 @@ void loop() {
   sumo_procesa();
   // realizar otras operaciones dentro de loop en caso de ser necesario
 }
+
+/**
+   Definición de los estados del automata finito del robot.
+*/
+enum gsumo_estados {
+  /**
+     ESPERA: El robot esta esperando a que se presione un boton para comenzar su funcionamiento.
+  */
+  E_ESPERA,
+
+  /**
+     COMIENZA A BUSCAR: Estado transitorio en el que el robot decide si debe girar a la derecha
+     o a la izquierda para buscar al oponente y activa sus motores en la dirección que
+     corresponda.
+  */
+  E_COM_BUSCAR,
+
+  /**
+    BUSCAR: Mientras el robot gira, este mide la distancia para encontrar al otro robot. Una
+    vez que lo encuentra para al siguiente estado para comenzar a empujar.
+  */
+  E_BUSCAR,
+
+  /**
+     Estado transitorio en el que el robot activa sus motores en linea recta y se prepara para
+     empujar al oponente.
+  */
+  E_COM_ATACAR,
+
+  /**
+     Mientras empuja, el robot mide distancia para asegurarse que sigue teniendo al oponente
+     enfrente. Seguirá empujando hasta llegar a la orilla o hasta que no detecte al contrincante.
+  */
+  E_ATACAR,
+
+  /**
+     Estado transitorio en el que el robot se prepara para retroceder y activa sus motores
+     en reversa.
+  */
+  E_COM_REVERSA,
+
+  /**
+     El robot retrocede por cierto tiempo para intentar regresar al centro del dojo. La constante
+     CONF_TIE_REVERSA define el tiempo que dura el movimiento en reversa.
+  */
+  E_REVERSA,
+};
+
+/**
+   Definicion de direcciones para movimiento del robot.
+*/
+enum gsumo_direcciones {
+  E_IZQUIERDA,
+  E_DERECHA,
+};
 
 /**
    Implementación del automata finito del robot de sumo
@@ -143,7 +200,7 @@ void sumo_procesa() {
       break;
 
     case E_COM_ATACAR:
-      // el robot avanza hacia adelante con velocidad de ataque en todos los motores
+      // el robot avanza hacia adelante con velocidad de ataque en ambos motores
       Serial.println(F("Atacar!"));
       motorIzq.setSpeed(CONF_VEL_ATAQUE);
       motorDer.setSpeed(CONF_VEL_ATAQUE);
