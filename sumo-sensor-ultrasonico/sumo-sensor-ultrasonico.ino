@@ -1,5 +1,22 @@
+/**
+   -->  CURSO BASICO DE ROBOTICA CON ARDUINO  <--
+   -->           MATERIAL DE APOYO            <--
+
+   Potenciado por:
+   Geek Factory - "Dale vuelo a tus proyectos"
+   www.geekfactory.mx
+
+   CONSULTA EL ARCHIVO LICENCIA.TXT PARA CONOCER MÁS SOBRE LOS DERECHOS DE DISTRIBUCIÓN DE ESTE
+   MATERIAL. PUBLICADO BAJO LICENCIA ATTRIBUTION-NONCOMMERCIAL-SHAREALIKE 4.0 INTERNATIONAL
+   (CC BY-NC-SA 4.0).
+
+   PRÁCTICA ULTRASONICO: Medición de distancia sin retardos.
+
+   Este programa muestra como leer el sensor ultrasónico sin utilizar la función delay, de forma
+   que nuestro microcontrolador esté disponible para realizar otras tareas.
+*/
 #include <Ultrasonic.h>
-#include <GBOT.h>
+#include "pines.h"
 
 /**
     Objeto que permite el control del sensor ultrasónico

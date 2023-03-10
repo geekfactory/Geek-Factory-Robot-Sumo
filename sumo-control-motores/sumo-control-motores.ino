@@ -1,10 +1,10 @@
-#include "GBOT.h"
+#include "pines.h"
 
 void setup() {
   // iniciar puerto y mostrar mensaje
-  Serial.begin(115200);
+  Serial.begin(9600);
   Serial.println(F("----------------------------------------------------"));
-  Serial.println(F("                 ROBOT SUMO - MOTORES               "));
+  Serial.println(F("              L298N - CONTROL DE MOTORES            "));
   Serial.println(F("              https://www.geekfactory.mx            "));
   Serial.println(F("----------------------------------------------------"));
 
@@ -29,6 +29,7 @@ void setup() {
 
 void loop() {
 
+  // acelerar el motor hasta alcanzar la máxima velocidad
   for (int i = 0; i <= 255; i++) {
     delay(100);
     analogWrite(PIN_MOTOR_DER_PWM, i);
@@ -36,8 +37,10 @@ void loop() {
     Serial.println(i);
   }
 
+  // el motor permanece a máxima velocidad durante 5 segundos
   delay(5000);
 
+  // desacelerar el motor hasta detenerlo totalmente
   for (int i = 255; i >= 0; i--) {
     delay(100);
     analogWrite(PIN_MOTOR_DER_PWM, i);
@@ -45,5 +48,6 @@ void loop() {
     Serial.println(i);
   }
 
+  // el motor permanece detenido durante 5 segundos
   delay(5000);
 }

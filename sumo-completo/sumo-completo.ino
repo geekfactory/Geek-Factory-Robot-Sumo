@@ -43,9 +43,13 @@ GFButton botonInicio(PIN_BOTON_INICIO);
 Ultrasonic ultrasonico(PIN_SENSOR_ULTRASONICO);
 
 /**
-   Objetos para el control de motores izquierdo y derecho
+   Objeto para el control de motor izquierdo
 */
 GFMotor motorIzq(PIN_MOTOR_IZQ_1, PIN_MOTOR_IZQ_2, PIN_MOTOR_IZQ_PWM);
+
+/**
+   Objeto para el control de motor derecho
+*/
 GFMotor motorDer(PIN_MOTOR_DER_1, PIN_MOTOR_DER_2, PIN_MOTOR_DER_PWM);
 
 /**
@@ -67,7 +71,9 @@ void setup() {
   pinMode(PIN_SENSOR_LINEA_IZQ, INPUT);
   pinMode(PIN_SENSOR_LINEA_DER, INPUT);
 
+  // LED inicia con parpadeo muy lento
   botonInicio.setDebounceTime(100);
+  ledEstado.setSpeed(LED_SLOW);
 }
 
 /**
@@ -163,6 +169,8 @@ void sumo_procesa() {
 
     // iniciar busqueda del oponente
     case E_COM_BUSCAR:
+      // el led parpadea a velocidad media
+      ledEstado.setSpeed(LED_NORMAL);
       // decidir hacia que lado girar
       if (ultimolado == E_IZQUIERDA) {
         Serial.println(F("Busqueda DER"));
@@ -200,6 +208,8 @@ void sumo_procesa() {
       break;
 
     case E_COM_ATACAR:
+      // el LED parpadea extremadamente rápido
+      ledEstado.setSpeed(LED_VFAST);
       // el robot avanza hacia adelante con velocidad de ataque en ambos motores
       Serial.println(F("Atacar!"));
       motorIzq.setSpeed(CONF_VEL_ATAQUE);
@@ -225,6 +235,7 @@ void sumo_procesa() {
       break;
 
     case E_COM_REVERSA:
+      // encender los motores en reversa
       Serial.println(F("Reversa"));
       motorIzq.setSpeed(-CONF_VEL_REVERSA);
       motorDer.setSpeed(-CONF_VEL_REVERSA);
@@ -233,7 +244,7 @@ void sumo_procesa() {
       break;
 
     case E_REVERSA:
-      // evaluar tiempo maximo en reversa
+      // evaluar si ya ha transcurrido el tiempo maximo en reversa
       if (tmillis - tultimoestado >= CONF_TIE_REVERSA) {
         estado = E_COM_BUSCAR;
       }

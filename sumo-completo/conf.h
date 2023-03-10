@@ -9,12 +9,6 @@
    CONSULTA EL ARCHIVO LICENCIA.TXT PARA CONOCER MÁS SOBRE LOS DERECHOS DE DISTRIBUCIÓN DE ESTE
    MATERIAL. PUBLICADO BAJO LICENCIA ATTRIBUTION-NONCOMMERCIAL-SHAREALIKE 4.0 INTERNATIONAL
    (CC BY-NC-SA 4.0).
-
-   PRÁCTICA FINAL: Robot sumo completo
-
-   Este programa implementa un robot sumo que utiliza un único sensor ultrasónico para buscar
-   y atacar (empujar) al contrincante. También mantiene al robot dentro del dojo mediante los
-   sensores de detección de linea.
 */
 
 #ifndef CONF_H
